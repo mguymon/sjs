@@ -1,8 +1,4 @@
-# Sjs
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/sjs`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+# Simple JSON Streaming for JRuby and friends.
 
 ## Installation
 
@@ -22,7 +18,37 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Uses https://github.com/mguymon/simple_stream to parse a stream of JSON.
+
+Stream json fragments to `Sjs::Simplestream`, which returns an array of entities
+and optional will execute a callback. `Sjs::Simplestream` will buffer fragments for
+8092 characters by default than parse it into entities. The stream
+can also be flushed earlier with `flush!`
+
+### Examples
+
+#### Basic
+
+    handler = Sjs::SimpleStream
+    entities = handler.stream(json_fragment)
+    entities += handler.flush!
+
+#### With callback
+
+    handler = Sjs::SimpleStream
+    handler.apply_callback do |entities|
+      puts entities
+    end
+    handler.stream(json_fragment) # entities are still returned as well in the callback
+    handler.flush!
+
+#### Stream from URL with callback
+
+    handler = Sjs::SimpleStream
+    # runs until the request finishes
+    handler.stream_from_url('http://localhost/sample') do
+      puts entities
+    end
 
 ## Development
 
@@ -33,4 +59,3 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/sjs.
-
