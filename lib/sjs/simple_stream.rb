@@ -30,7 +30,7 @@ module Sjs
     # @param callback [Block] Block that will yield the parsed entities
     def apply_callback(&callback)
       parser_callback = proc do |data|
-        callback.call(transform_to_ruby(entities))
+        callback.call(transform_to_ruby(data))
       end
 
       parser.setCallback(parser_callback)

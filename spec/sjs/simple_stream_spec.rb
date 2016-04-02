@@ -22,6 +22,22 @@ describe Sjs::SimpleStream do
     it 'should convert multiple lines into entities' do
       expect(result).to eql([{ 'test' => 123, 'split_line' => true }])
     end
+
+    context 'with a callback' do
+      let(:result) { [] }
+
+      before do
+        subject.apply_callback do |entities|
+          result << entities
+        end
+        stream.each { |line| subject.stream(line) }
+        subject.flush!
+      end
+
+      it 'should convert multiple lines into entities' do
+        expect(result).to eql([{ 'test' => 123, 'split_line' => true }])
+      end
+    end
   end
 
   describe '#reset!' do
